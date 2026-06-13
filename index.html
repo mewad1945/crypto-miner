@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>XMRig Web Miner</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Miner Dashboard</h1>
-        <div id="status">Status: Laddar bibliotek...</div>
+        <div id="status">Status: Laddar...</div>
         <div class="controls">
             <button id="startBtn" disabled>STARTA</button>
             <button id="stopBtn">STOPPA</button>
@@ -16,8 +15,9 @@
         <div id="logs"></div>
     </div>
 
-    <script src="init-module.js"></script>
-    <script src="xmrig-wasm.js"></script>
-    <script src="script.js"></script>
+    <!-- Laddningsordning: 1. Init, 2. Bibliotek, 3. Logik -->
+    <script src="init-module.js" defer></script>
+    <script src="xmrig-wasm.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

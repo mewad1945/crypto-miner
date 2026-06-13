@@ -3,20 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>XMRig Web Miner</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Miner Dashboard</h1>
-        <div id="status">Status: Laddar bibliotek...</div>
-        <div class="controls">
-            <button id="startBtn" disabled>STARTA</button>
-            <button id="stopBtn">STOPPA</button>
-        </div>
-        <div id="logs"></div>
-    </div>
+    <h1>Miner Dashboard</h1>
+    <div id="status">Status: Laddar...</div>
+    <button id="startBtn" disabled>STARTA</button>
+    <button id="stopBtn">STOPPA</button>
+    <div id="logs"></div>
 
-    <script src="init-module.js"></script>
+    <!-- Ladda in biblioteket från dist-mappen -->
     <script src="xmrig-wasm.js"></script>
     <script src="script.js"></script>
 </body>

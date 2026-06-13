@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Private Mining Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Private Miner Dashboard</h1>
+        <input type="password" id="pass" placeholder="Ange lösenord">
+        
+        <div class="controls">
+            <button id="startBtn">STARTA MINING</button>
+            <button id="stopBtn">STOPPA</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">Status: <span id="status">Avstängd</span></div>
+            <div class="stat-card">Hashrate: <span id="hashrate">0</span> H/s</div>
+            <div class="stat-card">Pending: <span id="total-mined">0</span> XMR</div>
+            <div class="stat-card">Totala Hashes: <span id="shares">0</span></div>
+        </div>
+
+        <div id="logs"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

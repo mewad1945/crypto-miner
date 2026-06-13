@@ -21,7 +21,7 @@ document.getElementById('startBtn').addEventListener('click', () => {
     const passwordInput = document.getElementById('pass').value;
     
     if (passwordInput !== SECRET) {
-        alert("Fel lösenord!");
+        alert("Fel losenord!");
         return;
     }
 

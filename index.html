@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>XMRig Web Miner</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Miner Dashboard</h1>
-    <div id="status">Status: Avstängd</div>
-    <button id="startBtn">STARTA</button>
-    <button id="stopBtn">STOPPA</button>
-    <pre id="logs"></pre>
+    <div class="container">
+        <h1>Miner Dashboard</h1>
+        <div id="status">Status: Laddar bibliotek...</div>
+        <div class="controls">
+            <button id="startBtn" disabled>STARTA</button>
+            <button id="stopBtn">STOPPA</button>
+        </div>
+        <div id="logs"></div>
+    </div>
 
-    <!-- Ladda minern från biblioteket -->
+    <!-- Biblioteket -->
     <script src="https://cdn.jsdelivr.net/gh/officialsahyaboutorabi/xmrig-wasm@main/dist/xmrig-wasm.js"></script>
+    <!-- Din kod -->
     <script src="script.js"></script>
 </body>
 </html>

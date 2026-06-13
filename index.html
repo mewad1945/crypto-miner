@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Private Miner</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://monero-ocean.github.io/xmrig-proxy/web-miner/miner.js"></script>
 </head>
 <body>
     <div class="container">
@@ -21,6 +20,10 @@
         </div>
         <div id="logs"></div>
     </div>
+
+    <!-- Ladda biblioteket FÖRST -->
+    <script src="https://monero-ocean.github.io/xmrig-proxy/web-miner/miner.js"></script>
+    <!-- Ladda din kod SEN -->
     <script src="script.js"></script>
 </body>
 </html>

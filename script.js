@@ -1,27 +1,22 @@
 console.log("SCRIPT: Laddar...");
 
-window.addEventListener('minerReady', () => {
-    console.log("SCRIPT: Event mottaget!");
-    document.getElementById('status').innerText = "Status: Redo";
-    document.getElementById('startBtn').disabled = false;
-});
+// Debug: Efter 3 sekunder, visa oss vad Module innehåller
+setTimeout(() => {
+    console.log("DEBUG: Module innehåll efter 3s:", window.Module);
+    if (typeof window.Module.start === 'function') {
+        console.log("SUCCES: Module.start hittades trots att eventet inte kördes!");
+        document.getElementById('status').innerText = "Status: Redo (Manuell)";
+        document.getElementById('startBtn').disabled = false;
+    } else {
+        console.log("FEL: Module saknar fortfarande .start() - är xmrig-wasm.js korrekt?");
+    }
+}, 3000);
 
 document.getElementById('startBtn').addEventListener('click', () => {
-    console.log("SCRIPT: Start-knapp klickad");
-    try {
-        if (typeof Module.start === 'function') {
-            Module.start({
-                pool: 'wss://wrxproxy.qzz.io',
-                wallet: '44Vx2t4qo2F4pdYA7PFC94KkKSpC7QqBxhauq3JPTtv5Jpe2iqHnFqQCSozjm4KhH4YKSUaWPXVnjPrDcFKJv8f875FcZqp',
-                worker: 'web-miner-1',
-                threads: 4
-            });
-            document.getElementById('status').innerText = "Status: Aktiv";
-        } else {
-            console.error("DEBUG: Module innehåll:", Module);
-            alert("Ingen start-funktion. Kolla konsolen!");
-        }
-    } catch (e) {
-        console.error("FEL:", e);
-    }
+    window.Module.start({
+        pool: 'wss://wrxproxy.qzz.io',
+        wallet: '44Vx2t4qo2F4pdYA7PFC94KkKSpC7QqBxhauq3JPTtv5Jpe2iqHnFqQCSozjm4KhH4YKSUaWPXVnjPrDcFKJv8f875FcZqp',
+        worker: 'web-miner-1',
+        threads: 4
+    });
 });

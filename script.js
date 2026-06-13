@@ -1,4 +1,3 @@
-const SECRET = "DittHemligaLosenord123"; // ÄNDRA DETTA
 const WALLET = "44Vx2t4qo2F4pdYA7PFC94KkKSpC7QqBxhauq3JPTtv5Jpe2iqHnFqQCSozjm4KhH4YKSUaWPXVnjPrDcFKJv8f875FcZqp";
 
 let miner = null;
@@ -14,11 +13,9 @@ async function updateStatsFromPool() {
 }
 
 document.getElementById('startBtn').addEventListener('click', () => {
-    if (document.getElementById('pass').value !== SECRET) return alert("Fel lösenord!");
     if (miner) return;
 
     document.getElementById('status').innerText = "Aktiv";
-    // Skapa instans av minern (Miner-klassen kommer från scriptet i index.html)
     miner = new Miner('pool.supportxmr.com:443', WALLET, ''); 
     miner.start();
 
@@ -27,6 +24,7 @@ document.getElementById('startBtn').addEventListener('click', () => {
     }, 2000);
     
     updateStatsFromPool();
+    setInterval(updateStatsFromPool, 60000);
     log("Mining startad.");
 });
 

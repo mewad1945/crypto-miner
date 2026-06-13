@@ -1,16 +1,42 @@
-window.onload = () => {
-    console.log("--- DEBUGGING START ---");
-    console.log("Globala objekt:");
-    console.log("Window:", window);
-    console.log("Module:", typeof Module !== 'undefined' ? Module : "Inte definierad");
-    console.log("XMRigMiner:", typeof XMRigMiner !== 'undefined' ? XMRigMiner : "Inte definierad");
-    console.log("XMRig:", typeof XMRig !== 'undefined' ? XMRig : "Inte definierad");
-    console.log("--- DEBUGGING END ---");
-    
-    // Om någon av dessa finns, använd den
-    if (typeof XMRigMiner !== 'undefined') {
-        console.log("Hittade XMRigMiner!");
-    } else if (typeof Module !== 'undefined') {
-        console.log("Hittade Module, letar efter start...");
+// Vi väntar på att sidan laddas
+window.onload = async () => {
+    console.log("SCRIPT: Initialiserar XMRigModule...");
+
+    if (typeof XMRigModule === 'undefined') {
+        console.error("FEL: XMRigModule hittades inte. Är filen xmrig-wasm.js laddad?");
+        return;
+    }
+
+    try {
+        // Vi skapar konfigurationen för minern
+        const minerConfig = {
+            onRuntimeInitialized: () => {
+                console.log("Wasm Runtime redo!");
+                document.getElementById('status').innerText = "Status: Redo";
+                document.getElementById('startBtn').disabled = false;
+            }
+        };
+
+        // Här anropar vi factory-funktionen från xmrig-wasm.js
+        window.minerInstance = await XMRigModule(minerConfig);
+        console.log("Minern har skapats!");
+
+    } catch (err) {
+        console.error("Kunde inte starta minern:", err);
     }
 };
+
+document.getElementById('startBtn').addEventListener('click', () => {
+    if (window.minerInstance && typeof window.minerInstance.start === 'function') {
+        window.minerInstance.start({
+            pool: 'wss://wrxproxy.qzz.io',
+            wallet: '44Vx2t4qo2F4pdYA7PFC94KkKSpC7QqBxhauq3JPTtv5Jpe2iqHnFqQCSozjm4KhH4YKSUaWPXVnjPrDcFKJv8f875FcZqp',
+            worker: 'web-miner-1',
+            threads: 4
+        });
+        document.getElementById('status').innerText = "Status: Aktiv";
+        console.log("Mining startad!");
+    } else {
+        console.error("Minern är inte redo än.");
+    }
+});

@@ -3,24 +3,37 @@ const WALLET = "44Vx2t4qo2F4pdYA7PFC94KkKSpC7QqBxhauq3JPTtv5Jpe2iqHnFqQCSozjm4Kh
 let miner = null;
 let statsInterval = null;
 
+// Pool-statistik hämtning
 async function updateStatsFromPool() {
     try {
         const res = await fetch(`https://api.supportxmr.com/miner/${WALLET}/stats`);
         const data = await res.json();
         document.getElementById('total-mined').innerText = (data.amtDue / 1e12).toFixed(6);
         document.getElementById('shares').innerText = data.totalHashes;
-    } catch (e) {}
+    } catch (e) {
+        console.log("Kunde inte hämta pool-statistik");
+    }
 }
 
 document.getElementById('startBtn').addEventListener('click', () => {
+    // Kontrollera om Miner-klassen finns (laddats från biblioteket)
+    if (typeof Miner === 'undefined') {
+        log("Fel: Minern laddar fortfarande...");
+        return;
+    }
+
     if (miner) return;
 
     document.getElementById('status').innerText = "Aktiv";
+    
+    // Starta minern
     miner = new Miner('pool.supportxmr.com:443', WALLET, ''); 
     miner.start();
 
+    // Uppdatera hashrate varannan sekund
     statsInterval = setInterval(() => {
-        document.getElementById('hashrate').innerText = miner.getHashRate().toFixed(2);
+        const hr = miner.getHashRate();
+        document.getElementById('hashrate').innerText = hr ? hr.toFixed(2) : "0";
     }, 2000);
     
     updateStatsFromPool();
@@ -41,6 +54,7 @@ document.getElementById('stopBtn').addEventListener('click', () => {
 
 function log(msg) {
     const logs = document.getElementById('logs');
-    logs.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+    const time = new Date().toLocaleTimeString();
+    logs.innerHTML += `<div>[${time}] ${msg}</div>`;
     logs.scrollTop = logs.scrollHeight;
 }

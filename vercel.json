@@ -5,7 +5,10 @@
       "headers": [
         { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
         { "key": "Cross-Origin-Embedder-Policy", "value": "require-corp" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net; connect-src 'self' wss://wrxproxy.qzz.io; worker-src 'self' blob: https://cdn.jsdelivr.net;" }
+        { 
+          "key": "Content-Security-Policy", 
+          "value": "default-src 'self'; script-src 'self' 'unsafe-eval'; connect-src 'self' wss://wrxproxy.qzz.io; worker-src 'self' blob:;" 
+        }
       ]
     }
   ]

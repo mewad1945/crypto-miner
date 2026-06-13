@@ -11,9 +11,11 @@ function log(msg) {
 }
 
 function checkReady() {
+    // Söker efter bibliotekets huvudobjekt
     const lib = window.Module || window.XMRig || window.XMRigMiner || null;
 
     if (lib) {
+        // Försöker hitta minern i biblioteket
         MinerClass = lib.XMRigMiner || lib;
         
         document.getElementById('status').innerText = "Status: Redo";
@@ -45,20 +47,40 @@ document.getElementById('startBtn').addEventListener('click', () => {
             threads: 4
         };
 
-        // FIX: Kolla om MinerClass är en funktion (klass) eller ett objekt
+        // Här försöker vi anropa biblioteket på alla kända sätt
         if (typeof MinerClass === 'function') {
             miner = new MinerClass(config);
+        } else if (MinerClass.create && typeof MinerClass.create === 'function') {
+            miner = MinerClass.create(config);
+        } else if (MinerClass.init && typeof MinerClass.init === 'function') {
+            miner = MinerClass.init(config);
         } else {
-            // Om det är ett objekt, anta att den har en init- eller create-metod 
-            // eller att MinerClass i sig är instansen
-            miner = MinerClass;
+            // Om inget fungerar, logga hela objektet i konsolen
+            console.error("DEBUG - MinerClass innehåll:", MinerClass);
+            throw new Error("Hittade inget sätt att skapa minern. Kolla konsolen (F12) för detaljer.");
         }
 
-        miner.start();
-        document.getElementById('status').innerText = "Status: Aktiv";
-        log("Mining startad!");
+        // Försök starta minern
+        if (miner && typeof miner.start === 'function') {
+            miner.start();
+            document.getElementById('status').innerText = "Status: Aktiv";
+            log("Mining startad!");
+        } else {
+            throw new Error("Miner-instansen saknar .start() metod.");
+        }
+
     } catch (e) {
         log("FEL: " + e.message);
-        console.error(e);
+        console.error("Feldetaljer:", e);
+    }
+});
+
+document.getElementById('stopBtn').addEventListener('click', () => {
+    if (miner && typeof miner.stop === 'function') {
+        miner.stop();
+        document.getElementById('status').innerText = "Status: Stoppad";
+        log("Mining stoppad.");
+    } else {
+        location.reload();
     }
 });

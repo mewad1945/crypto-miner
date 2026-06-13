@@ -2,28 +2,17 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <title>Private Miner</title>
-    <link rel="stylesheet" href="style.css">
+    <title>XMRig Web Miner</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Miner Dashboard</h1>
-        <div class="controls">
-            <button id="startBtn">STARTA</button>
-            <button id="stopBtn">STOPPA</button>
-        </div>
-        <div class="stats-grid">
-            <div class="stat-card">Status: <span id="status">Avstängd</span></div>
-            <div class="stat-card">Hashrate: <span id="hashrate">0</span> H/s</div>
-            <div class="stat-card">Pending: <span id="total-mined">0</span> XMR</div>
-            <div class="stat-card">Totala Hashes: <span id="shares">0</span></div>
-        </div>
-        <div id="logs"></div>
-    </div>
+    <h1>Miner Dashboard</h1>
+    <div id="status">Status: Avstängd</div>
+    <button id="startBtn">STARTA</button>
+    <button id="stopBtn">STOPPA</button>
+    <pre id="logs"></pre>
 
-    <!-- Ladda biblioteket FÖRST -->
-    <script src="https://monero-ocean.github.io/xmrig-proxy/web-miner/miner.js"></script>
-    <!-- Ladda din kod SEN -->
+    <!-- Ladda minern från biblioteket -->
+    <script src="https://cdn.jsdelivr.net/gh/officialsahyaboutorabi/xmrig-wasm@main/dist/xmrig-wasm.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

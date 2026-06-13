@@ -2,43 +2,38 @@ let miner = null;
 
 function log(msg) {
     const logs = document.getElementById('logs');
-    logs.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+    logs.innerHTML += `<div>> ${msg}</div>`;
     logs.scrollTop = logs.scrollHeight;
 }
 
-// Kontrollera om webbläsaren stödjer kraven för RandomX
-if (typeof SharedArrayBuffer === 'undefined') {
-    log("KRITISKT FEL: Din webbläsare stödjer inte SharedArrayBuffer.");
-    log("Detta krävs för RandomX-mining.");
-}
-
-function checkLoaded() {
+// Vänta på att XMRig-objektet ska bli tillgängligt
+function init() {
     if (typeof XMRigMiner !== 'undefined') {
         document.getElementById('status').innerText = "Status: Redo";
         document.getElementById('startBtn').disabled = false;
-        log("Minern laddad.");
+        log("System redo.");
     } else {
-        log("Väntar på bibliotek...");
-        setTimeout(checkLoaded, 1000);
+        setTimeout(init, 500);
     }
 }
-checkLoaded();
+init();
 
 document.getElementById('startBtn').addEventListener('click', () => {
     try {
-        log("Initierar...");
+        log("Startar miner...");
         miner = new XMRigMiner({
             pool: 'wss://wrxproxy.qzz.io',
             wallet: '44Vx2t4qo2F4pdYA7PFC94KkKSpC7QqBxhauq3JPTtv5Jpe2iqHnFqQCSozjm4KhH4YKSUaWPXVnjPrDcFKJv8f875FcZqp',
             worker: 'web-miner-1',
-            threads: navigator.hardwareConcurrency || 4
+            worker_file: 'xmrig-worker.js', // Viktigt!
+            threads: 4
         });
 
         miner.start();
         document.getElementById('status').innerText = "Status: Aktiv";
-        log("Mining startad med " + (navigator.hardwareConcurrency || 4) + " trådar.");
-    } catch (err) {
-        log("FEL vid start: " + err.message);
+        log("Mining påbörjad!");
+    } catch (e) {
+        log("Fel: " + e.message);
     }
 });
 

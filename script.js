@@ -1,4 +1,4 @@
-const SECRET = "DittHemligaLosenord123";
+const SECRET = "MittHemligaLosenord123";
 const WALLET = "44Vx2t4qo2F4pdYA7PFC94KkKSpC7QqBxhauq3JPTtv5Jpe2iqHnFqQCSozjm4KhH4YKSUaWPXVnjPrDcFKJv8f875FcZqp";
 
 let miner = null;

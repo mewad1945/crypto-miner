@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Miner Dashboard</title>
-    <style>
-        body { background: #0a0a0f; color: #e0e0e5; font-family: monospace; padding: 20px; }
-        .stat { font-size: 20px; color: #4ade80; margin-bottom: 10px; }
-        #logs { background: #151520; padding: 15px; border-radius: 8px; height: 300px; overflow-y: auto; border: 1px solid #333; }
-    </style>
+    <!-- Länka till din nya CSS-fil -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Miner Dashboard</h1>
@@ -18,47 +15,10 @@
     <h3>Logg:</h3>
     <div id="logs"></div>
 
+    <!-- Ladda in biblioteken -->
     <script src="xmrig-web-miner.js"></script>
     <script src="xmrig-wasm.js"></script>
-    <script>
-        const miner = new XMRigWebMiner();
-        const logs = document.getElementById('logs');
-
-        function log(msg) {
-            logs.innerHTML += `<div>> ${msg}</div>`;
-            logs.scrollTop = logs.scrollHeight;
-        }
-
-        // Automatisk start
-        window.onload = async () => {
-            try {
-                await miner.init();
-                document.getElementById('status').innerText = "Status: Startar...";
-                
-                await miner.start({
-                    pool: 'wss://wrxproxy.qzz.io',
-                    wallet: '44Vx2t4qo2F4pdYA7PFC94KkKSpC7QqBxhauq3JPTtv5Jpe2iqHnFqQCSozjm4KhH4YKSUaWPXVnjPrDcFKJv8f875FcZqp', // ÄNDRA TILL DIN ADRESS
-                    threads: 2
-                });
-
-                document.getElementById('status').innerText = "Status: Aktiv";
-                log("Mining påbörjad!");
-
-                // Uppdatera statistik varje sekund
-                setInterval(() => {
-                    const stats = miner.getStats();
-                    document.getElementById('hashrate').innerText = `Hashrate: ${stats.hashrate.toFixed(1)} H/s`;
-                    document.getElementById('total').innerText = `Totalt minat: ${stats.totalHashes}`;
-                }, 1000);
-
-            } catch (e) {
-                document.getElementById('status').innerText = "Status: Fel!";
-                log("Fel: " + e.message);
-            }
-        };
-
-        // Logga händelser
-        miner.addEventListener('share', () => log("Share hittad! 🎉"));
-    </script>
+    <!-- Länka till din nya JS-fil -->
+    <script src="main.js"></script>
 </body>
 </html>
